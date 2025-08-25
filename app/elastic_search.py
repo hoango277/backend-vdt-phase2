@@ -28,24 +28,26 @@ def get_es() -> Optional[Elasticsearch]:
     )
     return _es_client
 
-def index_name(prefix: str, ts: Optional[datetime]) -> str:
-    if not ts:
-        ts = datetime.now(timezone.utc)
-    return f"{prefix}-{ts.strftime('%Y.%m.%d')}"
+def index_name(prefix: str, kind: str) -> str:
+    ts = datetime.now(timezone.utc)
+    safe = {
+        "network": "network",
+        "interaction": "interaction",
+    }.get(kind, "other")
+    return f"{prefix}-{safe}-{ts.strftime('%Y.%m.%d')}"
 
 def make_actions(kind: str, events: List[Dict[str, Any]]) -> Iterable[Dict[str, Any]]:
+
     for e in events:
-        ts = e.get("ts")
-        if isinstance(ts, str):
-            try:
-                ts = datetime.fromisoformat(ts.replace("Z", "+00:00"))
-            except Exception:
-                ts = None
-        idx = index_name(settings.ES_INDEX_PREFIX, ts)
+        ts = datetime.fromisoformat(e.get("@timestamp"))
+        out = ts.astimezone(timezone.utc) \
+            .isoformat(timespec='milliseconds') \
+            .replace('+00:00', 'Z')
+        idx = index_name(settings.ES_INDEX_PREFIX,kind)
         yield {
             "_op_type": "index",
             "_index": idx,
-            "_source": {**e, "@timestamp": (ts.isoformat() if ts else None), "kind": kind},
+            "_source": {**e, "@timestamp": out, "kind": kind},
         }
 
 def bulk_index(kind: str, events: List[Dict[str, Any]]) -> Optional[Dict[str, Any]]:

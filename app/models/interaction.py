@@ -61,7 +61,7 @@ class PageContext(BaseModel):
 class InteractionEvent(BaseModel):
     user: Optional[str] = None
     timestamp: Optional[int] = None
-    source: Optional[int] = None
+    source: Optional[str] = None
     sessionId: Optional[str] = None
     eventSequence: Optional[int] = None
     sessionDuration: Optional[int] = None
