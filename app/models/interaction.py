@@ -63,7 +63,6 @@ class InteractionEvent(BaseModel):
     timestamp: Optional[int] = None
     source: Optional[str] = None
     sessionId: Optional[str] = None
-    eventSequence: Optional[int] = None
     sessionDuration: Optional[int] = None
     pageContext: Optional[PageContext] = None
     domInfo: Optional[DomInfo] = None

@@ -9,7 +9,6 @@ class NetworkEvent(BaseModel):
     user: Optional[UserContext] = None
     request: Optional[Dict[str, Any]] = None
     response: Optional[Dict[str, Any]] = None
-    sequence : Optional[int] = None
     timing: Optional[Dict[str, Any]] = None
     timestamp: Optional[int] = None
     requestId: Optional[str] = None
