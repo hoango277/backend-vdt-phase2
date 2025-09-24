@@ -10,6 +10,7 @@ from app.config import settings
 from enum import Enum
 from sqlalchemy import Enum as SqlEnum
 
+
 engine = create_async_engine(settings.DATABASE_URL, pool_pre_ping=True)
 SessionLocal = async_sessionmaker(engine, expire_on_commit=False)
 
@@ -42,5 +43,6 @@ Index("ix_logs_kind", LogRecord.kind)
 
 async def init_models():
     # Create tables
+    from app.models.alert import Alert
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
