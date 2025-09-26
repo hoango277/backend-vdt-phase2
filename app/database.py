@@ -34,6 +34,7 @@ class User(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, index=True, nullable=False)
+    hashed_password = Column(String, nullable=False)
     fullname = Column(String, nullable=False)
     telegram_id = Column(BigInteger, unique=True, nullable=False)
     role = Column(SqlEnum(Role), nullable=False)
