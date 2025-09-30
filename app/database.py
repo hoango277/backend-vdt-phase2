@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from sqlalchemy import text, Index, Column, Integer, String
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy import BigInteger, Text, TIMESTAMP
@@ -38,6 +38,7 @@ class User(Base):
     fullname = Column(String, nullable=False)
     telegram_id = Column(BigInteger, unique=True, nullable=False)
     role = Column(SqlEnum(Role), nullable=False)
+    alerts = relationship("Alert", back_populates="assignee")
 
 Index("ix_logs_ts", LogRecord.ts)
 Index("ix_logs_kind", LogRecord.kind)
